@@ -327,7 +327,8 @@ lazy val genericBase = circeCrossModule("generic", mima = previousCirceVersion)
         case Some((2, minor)) if minor >= 13 => extraDirs("-2.13+")
         case _                               => Nil
       }
-    }
+    },
+    Test / classLoaderLayeringStrategy := ClassLoaderLayeringStrategy.Flat
   )
   .jsConfigure(_.settings(libraryDependencies += "org.typelevel" %% "jawn-parser" % jawnVersion % Test))
   .dependsOn(coreBase, testsBase % Test, literalBase % Test)
@@ -359,7 +360,8 @@ lazy val genericExtrasJS = genericExtrasBase.js
 lazy val shapesBase = circeCrossModule("shapes", mima = previousCirceVersion, CrossType.Pure)
   .settings(macroSettings)
   .settings(
-    libraryDependencies += "com.chuusai" %%% "shapeless" % shapelessVersion
+    libraryDependencies += "com.chuusai" %%% "shapeless" % shapelessVersion,
+    Test / classLoaderLayeringStrategy := ClassLoaderLayeringStrategy.Flat
   )
   .jsConfigure(_.settings(libraryDependencies += "org.typelevel" %% "jawn-parser" % jawnVersion % Test))
   .dependsOn(coreBase, testsBase % Test, literalBase % Test)
@@ -388,7 +390,8 @@ lazy val refinedBase = circeCrossModule("refined", mima = previousCirceVersion)
     libraryDependencies ++= Seq(
       "eu.timepit" %%% "refined" % refinedVersion,
       "eu.timepit" %%% "refined-scalacheck" % refinedVersion % Test
-    )
+    ),
+    Test / classLoaderLayeringStrategy := ClassLoaderLayeringStrategy.Flat
   )
   .dependsOn(coreBase, testsBase % Test)
 
@@ -407,7 +410,8 @@ lazy val scalajs = circeModule("scalajs", mima = None).enablePlugins(ScalaJSPlug
 
 lazy val scodecBase = circeCrossModule("scodec", mima = previousCirceVersion)
   .settings(
-    libraryDependencies += "org.scodec" %%% "scodec-bits" % "1.1.10"
+    libraryDependencies += "org.scodec" %%% "scodec-bits" % "1.1.10",
+    Test / classLoaderLayeringStrategy := ClassLoaderLayeringStrategy.Flat
   )
   .dependsOn(coreBase, testsBase % Test)
 
@@ -499,6 +503,9 @@ lazy val jawn = circeModule("jawn", mima = previousCirceVersion)
 
 lazy val java8Base = circeCrossModule("java8", mima = previousCirceVersion, CrossType.Pure)
   .dependsOn(coreBase, testsBase % Test)
+  .settings(
+    Test / classLoaderLayeringStrategy := ClassLoaderLayeringStrategy.Flat
+  )
   .jsSettings(
     libraryDependencies += "io.github.cquiroz" %%% "scala-java-time" % "2.0.0-RC1"
   )
